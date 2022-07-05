@@ -386,7 +386,7 @@ static int test_and_merge(const mem_opt_t *opt, int64_t l_pac, mem_chain_t *c,
                 c->seeds = auxSeedBuf;
                 tprof[PE13][tid]++;
             } else {  // new memory
-                // fprintf(stderr, "[%0.4d] re-allocing old seed, m: %d\n", tid, c->m);
+                // fprintf(stderr, "[%04d] re-allocing old seed, m: %d\n", tid, c->m);
                 if ((auxSeedBuf = (mem_seed_t *) realloc(c->seeds, c->m * sizeof(mem_seed_t))) == NULL) { fprintf(stderr, "ERROR: out of memory auxSeedBuf\n"); exit(1); }
                 c->seeds = auxSeedBuf;
             }
@@ -928,7 +928,7 @@ int mem_kernel1_core(FMI_search *fmi,
     // This covers enc_qdb/SMEM reallocs
     if (tot_len >= mmc->wsize_mem[tid])
     {
-        fprintf(stderr, "[%0.4d] Re-allocating SMEM data structures due to enc_qdb\n", tid);
+        fprintf(stderr, "[%04d] Re-allocating SMEM data structures due to enc_qdb\n", tid);
         int64_t tmp = mmc->wsize_mem[tid];
         mmc->wsize_mem[tid] = tot_len;
         mmc->matchArray[tid]   = (SMEM *) _mm_realloc(mmc->matchArray[tid],
@@ -1119,7 +1119,7 @@ static void worker_bwt(void *data, int seq_id, int batch_size, int tid)
     int memSize = w->nreads; 
     if (batch_size < BATCH_SIZE) {
         seedBufSz = (memSize - seq_id) * AVG_SEEDS_PER_READ;
-        // fprintf(stderr, "[%0.4d] Info: adjusted seedBufSz %d\n", tid, seedBufSz);
+        // fprintf(stderr, "[%04d] Info: adjusted seedBufSz %d\n", tid, seedBufSz);
     }
 
     mem_kernel1_core(w->fmi, w->opt,
@@ -2154,7 +2154,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
                     sp.regid = av->n - 1;
                         
                     if (numPairsLeft >= *wsize_pair) {
-                        fprintf(stderr, "[0000][%0.4d] Re-allocating seqPairArrays, in Left\n", tid);
+                        fprintf(stderr, "[0000][%04d] Re-allocating seqPairArrays, in Left\n", tid);
                         *wsize_pair += 1024;
                         seqPairArrayAux = (SeqPair *) realloc(seqPairArrayAux,
                                                               (*wsize_pair + MAX_LINE_LEN)
@@ -2177,7 +2177,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
                     leftQerOffset += s->qbeg;
                     if (leftQerOffset >= *wsize_buf_qer)
                     {
-                        fprintf(stderr, "[%0.4d] Re-allocating (doubling) seqBufQers in %s (left)\n",
+                        fprintf(stderr, "[%04d] Re-allocating (doubling) seqBufQers in %s (left)\n",
                                 tid, __func__);
                         int64_t tmp = *wsize_buf_qer;
                         *wsize_buf_qer *= 2;
@@ -2197,7 +2197,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
                     leftRefOffset += tmp;
                     if (leftRefOffset >= *wsize_buf_ref)
                     {
-                        fprintf(stderr, "[%0.4d] Re-allocating (doubling) seqBufRefs in %s (left)\n",
+                        fprintf(stderr, "[%04d] Re-allocating (doubling) seqBufRefs in %s (left)\n",
                                 tid, __func__);
                         int64_t tmp = *wsize_buf_ref;
                         *wsize_buf_ref *= 2;
@@ -2250,7 +2250,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
 
                     if (numPairsRight >= *wsize_pair)
                     {
-                        fprintf(stderr, "[0000] [%0.4d] Re-allocating seqPairArrays Right\n", tid);
+                        fprintf(stderr, "[0000] [%04d] Re-allocating seqPairArrays Right\n", tid);
                         *wsize_pair += 1024;
                         seqPairArrayAux = (SeqPair *) realloc(seqPairArrayAux,
                                                               (*wsize_pair + MAX_LINE_LEN)
@@ -2275,7 +2275,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
                     rightQerOffset += sp.len2;
                     if (rightQerOffset >= *wsize_buf_qer)
                     {
-                        fprintf(stderr, "[%0.4d] Re-allocating (doubling) seqBufQers in %s (right)\n",
+                        fprintf(stderr, "[%04d] Re-allocating (doubling) seqBufQers in %s (right)\n",
                                 tid, __func__);
                         int64_t tmp = *wsize_buf_qer;
                         *wsize_buf_qer *= 2;
@@ -2291,7 +2291,7 @@ void mem_chain2aln_across_reads_V2(const mem_opt_t *opt, const bntseq_t *bns,
                     rightRefOffset += sp.len1;
                     if (rightRefOffset >= *wsize_buf_ref)
                     {
-                        fprintf(stderr, "[%0.4d] Re-allocating (doubling) seqBufRefs in %s (right)\n",
+                        fprintf(stderr, "[%04d] Re-allocating (doubling) seqBufRefs in %s (right)\n",
                                 tid, __func__);
                         int64_t tmp = *wsize_buf_ref;
                         *wsize_buf_ref *= 2;

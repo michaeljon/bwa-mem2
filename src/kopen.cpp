@@ -222,7 +222,7 @@ static int kftp_send_cmd(ftpaux_t *aux, const char *cmd, int is_get)
 static int ftp_open(const char *fn)
 {
 	char *p, *host = 0, *port = 0, *retr = 0;
-	char host2[80], port2[10];
+	char host2[80], port2[12];
 	int v[6], l, fd = -1, ret, pasv_port, pasv_ip[4];
 	ftpaux_t aux;
 	
